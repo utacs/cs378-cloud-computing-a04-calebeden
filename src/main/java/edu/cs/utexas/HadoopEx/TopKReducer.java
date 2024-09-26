@@ -1,9 +1,7 @@
 package edu.cs.utexas.HadoopEx;
 
 import org.apache.hadoop.io.FloatWritable;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.log4j.Logger;
 
@@ -12,13 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 import java.util.PriorityQueue;
-import java.util.Iterator;
 
 
 
 public class TopKReducer extends  Reducer<Text, FloatWritable, Text, FloatWritable> {
 
-    private PriorityQueue<TaxiAndErrorRate> pq = new PriorityQueue<TaxiAndErrorRate>(5);
+    private PriorityQueue<TaxiAndErrorRate> pq = new PriorityQueue<TaxiAndErrorRate>(10);
 
 
     private Logger logger = Logger.getLogger(TopKReducer.class);
@@ -59,7 +56,7 @@ public class TopKReducer extends  Reducer<Text, FloatWritable, Text, FloatWritab
        }
 
        // keep the priorityQueue size <= heapSize
-       while (pq.size() > 5) {
+       while (pq.size() > 10) {
            pq.poll();
        }
 

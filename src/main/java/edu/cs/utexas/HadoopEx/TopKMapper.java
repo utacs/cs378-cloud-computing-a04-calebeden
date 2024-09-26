@@ -19,7 +19,7 @@ public class TopKMapper extends Mapper<Text, Text, Text, FloatWritable> {
 	private PriorityQueue<TaxiAndErrorRate> pq;
 
 	public void setup(Context context) {
-		pq = new PriorityQueue<>(5);
+		pq = new PriorityQueue<>(10);
 
 	}
 
@@ -37,7 +37,7 @@ public class TopKMapper extends Mapper<Text, Text, Text, FloatWritable> {
 
 		pq.add(new TaxiAndErrorRate(new Text(key), new FloatWritable(errorRate)) );
 
-		if (pq.size() > 5) {
+		if (pq.size() > 10) {
 			pq.poll();
 		}
 	}

@@ -6,12 +6,11 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class DriverEarningsMapper extends Mapper<Object, Text, Text, ArrayWritable> {
+public class DriverEarningsMapper extends Mapper<Object, Text, Text, FloatArrayWritable> {
 
 	// Create a counter and initialize with 1
 	private Text driver = new Text();
@@ -19,7 +18,7 @@ public class DriverEarningsMapper extends Mapper<Object, Text, Text, ArrayWritab
 	private FloatWritable tripTotal = new FloatWritable();
 	private FloatWritable tripDuration = new FloatWritable();
 	private FloatWritable[] valuesArray = new FloatWritable[2];
-	private ArrayWritable values = new ArrayWritable(FloatWritable.class);
+	private FloatArrayWritable values = new FloatArrayWritable();
 
 	public void map(Object key, Text value, Context context)
 			throws IOException, InterruptedException {
