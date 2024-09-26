@@ -3,12 +3,13 @@ package edu.cs.utexas.HadoopEx;
 import java.io.IOException;
 
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class TaxiGPSErrorReducer extends Reducer<IntWritable, IntWritable, IntWritable, FloatWritable> {
+public class TaxiGPSErrorReducer extends Reducer<Text, IntWritable, Text, FloatWritable> {
 
-    public void reduce(IntWritable time, Iterable<IntWritable> values, Context context)
+    public void reduce(Text taxiId, Iterable<IntWritable> values, Context context)
             throws IOException, InterruptedException {
         int total_entries = 0;
         int total_errors = 0;
@@ -22,7 +23,7 @@ public class TaxiGPSErrorReducer extends Reducer<IntWritable, IntWritable, IntWr
             }
         }
 
-        context.write(time, new FloatWritable(((float) total_errors) / total_entries));
+        context.write(taxiId, new FloatWritable(((float) total_errors) / total_entries));
 
     }
 }
