@@ -58,13 +58,13 @@ public class TaxiGPSErrorMapper extends Mapper<Object, Text, Text, IntWritable> 
 		String taxiId = sections[0];
 
 		String pickupLongString = sections[6];
-		float pickupLong = Float.parseFloat(pickupLongString);
+		float pickupLong = pickupLongString.isBlank() ? 0.0f : Float.parseFloat(pickupLongString);
 		String pickupLatString = sections[7];
-		float pickupLat = Float.parseFloat(pickupLatString);
+		float pickupLat = pickupLatString.isBlank() ? 0.0f : Float.parseFloat(pickupLatString);
 		String dropoffLongString = sections[8];
-		float dropoffLong = Float.parseFloat(dropoffLongString);
+		float dropoffLong = dropoffLongString.isBlank() ? 0.0f : Float.parseFloat(dropoffLongString);
 		String dropoffLatString = sections[9];
-		float dropoffLat = Float.parseFloat(dropoffLatString);
+		float dropoffLat = dropoffLatString.isBlank() ? 0.0f : Float.parseFloat(dropoffLatString);
 
 		try {
 			String pickupDateString = sections[2];

@@ -59,13 +59,13 @@ public class HourGPSErrorMapper extends Mapper<Object, Text, IntWritable, IntWri
 		}
 
 		String pickupLongString = sections[6];
-		float pickupLong = Float.parseFloat(pickupLongString);
+		float pickupLong = pickupLongString.isBlank() ? 0.0f : Float.parseFloat(pickupLongString);
 		String pickupLatString = sections[7];
-		float pickupLat = Float.parseFloat(pickupLatString);
+		float pickupLat = pickupLatString.isBlank() ? 0.0f : Float.parseFloat(pickupLatString);
 		String dropoffLongString = sections[8];
-		float dropoffLong = Float.parseFloat(dropoffLongString);
+		float dropoffLong = dropoffLongString.isBlank() ? 0.0f : Float.parseFloat(dropoffLongString);
 		String dropoffLatString = sections[9];
-		float dropoffLat = Float.parseFloat(dropoffLatString);
+		float dropoffLat = dropoffLatString.isBlank() ? 0.0f : Float.parseFloat(dropoffLatString);
 
 		try {
 			String pickupDateString = sections[2];
@@ -74,16 +74,17 @@ public class HourGPSErrorMapper extends Mapper<Object, Text, IntWritable, IntWri
 			Date dropoffDate = format.parse(dropoffDatetime);
 
 			if (dropoffDate.before(pickupDate)) {
-				// throw new IllegalArgumentException("Error: dropoff date is before pickup date");
+				// throw new IllegalArgumentException("Error: dropoff date is before pickup
+				// date");
 				return;
 			}
 
-			if (pickupLong == 0.0 || pickupLat == 0.0) {
+			if (pickupLong == 0.0f || pickupLat == 0.0f) {
 				calendar.setTime(pickupDate);
 				time.set(calendar.get(Calendar.HOUR_OF_DAY) + 1);
 				context.write(time, counter);
 			}
-			if (dropoffLong == 0.0 || dropoffLat == 0.0) {
+			if (dropoffLong == 0.0f || dropoffLat == 0.0f) {
 				calendar.setTime(dropoffDate);
 				time.set(calendar.get(Calendar.HOUR_OF_DAY) + 1);
 				context.write(time, counter);
