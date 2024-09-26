@@ -13,8 +13,8 @@ public class DriverEarningsReducer extends Reducer<Text, IntWritable, Text, Floa
 
     public void reduce(Text taxiId, Iterable<ArrayWritable> values, Context context)
             throws IOException, InterruptedException {
-        int total_money = 0;
-        int total_time = 0;
+        float total_money = 0;
+        float total_time = 0;
 
         for (ArrayWritable value : values) {
             Writable[] writables = value.get();
