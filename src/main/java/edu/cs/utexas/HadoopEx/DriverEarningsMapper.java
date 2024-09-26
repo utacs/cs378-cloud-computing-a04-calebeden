@@ -6,17 +6,20 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.ArrayWritable;
+import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class DriverEarningsMapper extends Mapper<Object, Text, Text, IntWritable> {
+public class DriverEarningsMapper extends Mapper<Object, Text, Text, ArrayWritable> {
 
 	// Create a counter and initialize with 1
-	private final IntWritable one = new IntWritable(1);
-	private final IntWritable zero = new IntWritable(0);
-	private Text taxi = new Text();
+	private Text driver = new Text();
 	private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private FloatWritable tripTotal = new FloatWritable();
+	private FloatWritable tripDuration = new FloatWritable();
+	private FloatWritable[] valuesArray = new FloatWritable[2];
+	private ArrayWritable values = new ArrayWritable(FloatWritable.class);
 
 	public void map(Object key, Text value, Context context)
 			throws IOException, InterruptedException {
@@ -56,6 +59,7 @@ public class DriverEarningsMapper extends Mapper<Object, Text, Text, IntWritable
 		}
 
 		String taxiId = sections[0];
+		String driverId = sections[1];
 
 		String pickupLongString = sections[6];
 		float pickupLong = Float.parseFloat(pickupLongString);
@@ -73,17 +77,23 @@ public class DriverEarningsMapper extends Mapper<Object, Text, Text, IntWritable
 			Date dropoffDate = format.parse(dropoffDatetime);
 
 			if (dropoffDate.before(pickupDate)) {
-				// throw new IllegalArgumentException("Error: dropoff date is before pickup date");
+				// throw new IllegalArgumentException("Error: dropoff date is before pickup
+				// date");
 				return;
 			}
 
 			if (pickupLong == 0.0 || pickupLat == 0.0 || dropoffLong == 0.0 || dropoffLat == 0.0) {
-				taxi.set(new Text(taxiId));
-				context.write(taxi, one);
-			} else {
-				taxi.set(new Text(taxiId));
-				context.write(taxi, zero);
+				return;
 			}
+
+			driver.set(new Text(driverId));
+			tripTotal.set(total);
+			tripDuration.set(duration);
+			valuesArray[0] = tripTotal;
+			valuesArray[1] = tripDuration;
+			values.set(valuesArray);
+			context.write(driver, values);
+
 		} catch (ParseException e) {
 			// throw new IllegalArgumentException("Error parsing date");
 			return;

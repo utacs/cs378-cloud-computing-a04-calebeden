@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.FloatWritable;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -48,7 +48,7 @@ public class DriverEarnings extends Configured implements Tool {
 
 			// specify output types
 			job.setOutputKeyClass(Text.class);
-			job.setOutputValueClass(IntWritable.class);
+			job.setOutputValueClass(ArrayWritable.class);
 
 			// specify input and output directories
 			FileInputFormat.addInputPath(job, new Path(args[0]));
