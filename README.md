@@ -1,77 +1,55 @@
-# Please add your team members' names here. 
+# Assignment 3
 
-## Team members' names 
+## Team members' names
 
-1. Student Name:
+1. Student Name: Caleb Eden
 
-   Student UT EID:
+   Student UT EID: cae2672
 
-2. Student Name:
+2. Student Name: Leo Lei
 
-   Student UT EID:
+   Student UT EID: ll36476
 
- ...
+## Course Name: CS378 - Cloud Computing
 
-##  Course Name: CS378 - Cloud Computing 
+## Unique Number: 51515
 
-##  Unique Number: 51515
-    
+## Report
 
+### Task 1 - Errors in GPS Position Records
 
-# Add your Project REPORT HERE 
+### Task 2 - Top 5 Taxis by GPS Error Rates
 
+### Task 3 - Top 10 Drivers by Earnings per Minute
 
-# Project Template
+### Task 4 - Executing on Google Dataproc
 
-# Running on Laptop     ####
+## How to compile the project
 
-Prerequisite:
+We use Apache Maven to compile and run this project.
 
-- Maven 3
+You need to install Apache Maven (<https://maven.apache.org/>)  on your system.
 
-- JDK 1.6 or higher
+Type on the command line:
 
-- (If working with eclipse) Eclipse with m2eclipse plugin installed
+```bash
+mvn clean package
+```
 
+## How to run Task 1
 
-The java main class is:
+```bash
+java -cp target/MapReduce-TaxiData-0.1-SNAPSHOT-jar-with-dependencies.jar edu.cs.utexas.HadoopEx.HourGPSErrors gs://cs378/taxi-data-sorted-large.csv gs://<bucket>/task1-output
+```
 
-edu.cs.utexas.HadoopEx.WordCount 
+## How to run Task 2
 
-Input file:  Book-Tiny.txt  
+```bash
+java -cp target/MapReduce-TaxiData-0.1-SNAPSHOT-jar-with-dependencies.jar edu.cs.utexas.HadoopEx.TaxiGPSErrors gs://cs378/taxi-data-sorted-large.csv gs://<bucket>/task2-intermediate gs://<bucket>/task2-output
+```
 
-Specify your own Output directory like 
+## How to run Task 3
 
-# Running:
-
-
-
-
-## Create a JAR Using Maven 
-
-To compile the project and create a single jar file with all dependencies: 
-	
-```	mvn clean package ```
-
-
-
-## Run your application
-Inside your shell with Hadoop
-
-Running as Java Application:
-
-```java -jar target/MapReduce-WordCount-example-0.1-SNAPSHOT-jar-with-dependencies.jar SOME-Text-Fiel.txt  output``` 
-
-Or has hadoop application
-
-```hadoop jar your-hadoop-application.jar edu.cs.utexas.HadoopEx.WordCount arg0 arg1 ... ```
-
-
-
-## Create a single JAR File from eclipse
-
-
-
-Create a single gar file with eclipse 
-
-*  File export -> export  -> export as binary ->  "Extract generated libraries into generated JAR"
+```bash
+java -cp target/MapReduce-TaxiData-0.1-SNAPSHOT-jar-with-dependencies.jar edu.cs.utexas.HadoopEx.DriverEarnings gs://cs378/taxi-data-sorted-large.csv gs://<bucket>/task3-intermediate gs://<bucket>/task3-output
+```
