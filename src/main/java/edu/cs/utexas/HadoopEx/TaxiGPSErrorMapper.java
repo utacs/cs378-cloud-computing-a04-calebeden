@@ -1,7 +1,6 @@
 package edu.cs.utexas.HadoopEx;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -11,15 +10,13 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class TaxiGPSErrorMapper extends Mapper<Object, Text, IntWritable, IntWritable> {
+public class TaxiGPSErrorMapper extends Mapper<Object, Text, Text, IntWritable> {
 
 	// Create a counter and initialize with 1
-	private final IntWritable counter = new IntWritable(1);
-	// Create a hadoop text object to store words
-	private IntWritable time = new IntWritable();
+	private final IntWritable one = new IntWritable(1);
+	private final IntWritable zero = new IntWritable(0);
+	private Text taxi = new Text();
 	private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-	private final Calendar calendar = Calendar.getInstance();
 
 	public void map(Object key, Text value, Context context)
 			throws IOException, InterruptedException {
@@ -58,6 +55,8 @@ public class TaxiGPSErrorMapper extends Mapper<Object, Text, IntWritable, IntWri
 			return;
 		}
 
+		String taxiId = sections[0];
+
 		String pickupLongString = sections[6];
 		float pickupLong = Float.parseFloat(pickupLongString);
 		String pickupLatString = sections[7];
@@ -78,15 +77,12 @@ public class TaxiGPSErrorMapper extends Mapper<Object, Text, IntWritable, IntWri
 				return;
 			}
 
-			if (pickupLong == 0.0 || pickupLat == 0.0) {
-				calendar.setTime(pickupDate);
-				time.set(calendar.get(Calendar.HOUR_OF_DAY) + 1);
-				context.write(time, counter);
-			}
-			if (dropoffLong == 0.0 || dropoffLat == 0.0) {
-				calendar.setTime(dropoffDate);
-				time.set(calendar.get(Calendar.HOUR_OF_DAY) + 1);
-				context.write(time, counter);
+			if (pickupLong == 0.0 || pickupLat == 0.0 || dropoffLong == 0.0 || dropoffLat == 0.0) {
+				taxi.set(new Text(taxiId));
+				context.write(taxi, one);
+			} else {
+				taxi.set(new Text(taxiId));
+				context.write(taxi, zero);
 			}
 		} catch (ParseException e) {
 			// throw new IllegalArgumentException("Error parsing date");
